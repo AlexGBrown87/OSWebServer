@@ -200,6 +200,35 @@ int main(int argc, char **argv, char **environ) {
 		 */
 		int newsock;		
 
+		//creating socket
+		newsock = socket(AF_INET, SOCK_STREAM, 0);
+		if(newsock = -1){
+			printf("socket failed to create");
+			exit(0);
+		}
+		else{
+			printf("socket created");
+		}
+		server_addr.sin_family = AF_INET;
+		server_addr.sin_addr = htonl(INADDR_ANY);
+		server_addr.sin_port = htons(8080);
+		//binding
+		if((bind(newsock, (SA*)&server_addr, sizeof(server_addr))) != 0){
+			printf("socket bind failed");
+			exit(0);
+		}
+		else{
+			printf("socket bound");
+		}
+		//starting to listen
+		if((listen(newsock,5)) != 0){
+			printf("listen failed");
+			exit(0);
+		}
+		else{
+			printf("listening");
+		}
+		
 		/*
 		 * Get the size of this structure, could pass NULL if we
 		 * don't care about who the client is.
