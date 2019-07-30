@@ -198,8 +198,8 @@ int main(int argc, char **argv, char **environ) {
 		 * socket that will be used for communication
 		 * between the client and this server (the child) 
 		 */
-		int newsock;		
-
+		int newsock;
+		
 		//creating socket
 		newsock = socket(AF_INET, SOCK_STREAM, 0);
 		if(newsock = -1){
@@ -211,7 +211,7 @@ int main(int argc, char **argv, char **environ) {
 		}
 		server_addr.sin_family = AF_INET;
 		server_addr.sin_addr = htonl(INADDR_ANY);
-		server_addr.sin_port = htons(8080);
+		server_addr.sin_port = htons(PORT);
 		//binding
 		if((bind(newsock, (SA*)&server_addr, sizeof(server_addr))) != 0){
 			printf("socket bind failed");
