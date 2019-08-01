@@ -182,10 +182,41 @@ int main(int argc, char **argv, char **environ) {
 	 */
 
 	/* TODO 1 */
+	//creating socket
+	sockid = socket(AF_INET, SOCK_STREAM, 0);
+	if(sockid == -1){
+		printf("socket failed to create\n");
+		exit(1);
+	}
+	else{
+		printf("socket created\n");
+	}
+	if(setsockopt(sockid,SOL_SOCKET,SO_REUSEADDR,&(int){1},sizeof(int)) == -1){
+		printf("setsockopt failed\n");
+		exit(1);
+	}
+	server_addr.sin_family = AF_INET;
+	server_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+	server_addr.sin_port = htons(PORT);
+	//binding
+	if((bind(sockid, (struct sockaddr*)&server_addr, sizeof(server_addr))) == -1){
+		printf("socket bind failed\n");
+		exit(1);
+	}
+	else{
+		printf("socket bound\n");
+	}
+	//starting to listen
+	if((listen(sockid,5)) == -1){
+		printf("listen failed\n");
+		exit(1);
+	}
+	else{
+		printf("listening\n");
+	}
 
 
 	signal(SIGCHLD, SIG_IGN);
-
 
 	/* 
 	 * - accept a new connection and fork.
@@ -200,35 +231,6 @@ int main(int argc, char **argv, char **environ) {
 		 */
 		int newsock;
 		
-		//creating socket
-		newsock = socket(AF_INET, SOCK_STREAM, 0);
-		if(newsock = -1){
-			printf("socket failed to create");
-			exit(0);
-		}
-		else{
-			printf("socket created");
-		}
-		server_addr.sin_family = AF_INET;
-		server_addr.sin_addr = htonl(INADDR_ANY);
-		server_addr.sin_port = htons(PORT);
-		//binding
-		if((bind(newsock, (SA*)&server_addr, sizeof(server_addr))) != 0){
-			printf("socket bind failed");
-			exit(0);
-		}
-		else{
-			printf("socket bound");
-		}
-		//starting to listen
-		if((listen(newsock,5)) != 0){
-			printf("listen failed");
-			exit(0);
-		}
-		else{
-			printf("listening");
-		}
-		
 		/*
 		 * Get the size of this structure, could pass NULL if we
 		 * don't care about who the client is.
@@ -242,6 +244,7 @@ int main(int argc, char **argv, char **environ) {
 		 */
 		 /* TODO 2 */
 
+		newsock = accept(sockid, (struct sockaddr*)&client_addr, &client_len);		
     		if (newsock < 0) {
 			perror("accept");
 			exit(-1);
