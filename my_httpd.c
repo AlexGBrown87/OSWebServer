@@ -183,8 +183,7 @@ int main(int argc, char **argv, char **environ) {
 
 	/* TODO 1 */
 	//creating socket
-	sockid = socket(AF_INET, SOCK_STREAM, 0);
-	if(sockid == -1){
+	if((sockid = socket(AF_INET, SOCK_STREAM, 0)) == -1){
 		perror("socket failed to create\n");
 		exit(1);
 	}
@@ -248,7 +247,7 @@ int main(int argc, char **argv, char **environ) {
 
 		newsock = accept(sockid, (struct sockaddr*)&client_addr, &client_len);		
     		if (newsock < 0) {
-			perror("accept");
+			perror("accept failed\n");
 			exit(-1);
 		}
 		else{
@@ -256,7 +255,7 @@ int main(int argc, char **argv, char **environ) {
 		}
 
 		if ( (pid = fork()) < 0) {
-			perror("Cannot fork");
+			perror("Cannot fork\n");
 			exit(0);
   		}
 ///////////////////////////////////////////////////////////////////////////////
