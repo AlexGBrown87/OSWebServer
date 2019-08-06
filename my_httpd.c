@@ -185,6 +185,7 @@ int main(int argc, char **argv, char **environ) {
 	//creating socket
 	if((sockid = socket(AF_INET, SOCK_STREAM, 0)) == -1){
 		perror("socket failed to create\n");
+		close(sockid);
 		exit(1);
 	}
 	else{
@@ -192,6 +193,7 @@ int main(int argc, char **argv, char **environ) {
 	}
 	if(setsockopt(sockid,SOL_SOCKET,SO_REUSEADDR,&(int){1},sizeof(int)) == -1){
 		perror("setsockopt failed\n");
+		close(sockid);
 		exit(1);
 	}
 	else{
@@ -203,6 +205,7 @@ int main(int argc, char **argv, char **environ) {
 	//binding
 	if((bind(sockid, (struct sockaddr*)&server_addr, sizeof(server_addr))) == -1){
 		perror("socket bind failed\n");
+		close(sockid);
 		exit(1);
 	}
 	else{
@@ -211,6 +214,7 @@ int main(int argc, char **argv, char **environ) {
 	//starting to listen
 	if((listen(sockid,5)) == -1){
 		perror("listen failed\n");
+		close(sockid);
 		exit(1);
 	}
 	else{
