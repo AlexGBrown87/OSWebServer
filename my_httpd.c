@@ -111,7 +111,29 @@ void SendDataBin(char *fileToSend, int sock, char *home, char *content) {
 	 */
 
 	 /* TODO 6 */
-
+	 s = write(sock,"I got your message\n",18);
+	 //s = write(sock,Header,strlen(Header));
+	 if(s<0){
+	 	perror("Write 1 error\n");
+	 }
+	 else{
+	 	printf("Write 1 successful\n");
+	 }
+	 //f = open(fileToSend,O_RDONLY);
+	 //if(f<0){
+	 //	perror("Open error\n");
+	 //}
+	 //else{
+	 //	printf("Open successful\n");
+	 //}
+	 //s = write(sock,s,strlen(s));
+	 //if(s<0){
+	 //	perror("Write 2 error\n");
+	 //}
+	 //else{
+	 //	printf("Write 2 successful\n");
+	 //}
+	 //close(f);
 }
 
 
@@ -122,6 +144,13 @@ void SendDataBin(char *fileToSend, int sock, char *home, char *content) {
 void ExtractFileRequest(char *req, char *buff) {
 
 	/* TODO 4  */
+	if(strstr(buff,"GET")){
+		int indexOfSlash = (int)(buff-strchr(buff,'/'));
+		buff=buff+indexOfSlash+1;
+		int indexOfSpace = (int)(req-strchr(req,' '));
+		req[indexOfSpace]='\0';
+	}
+	printf("HERE IS THE GET FILENAME:%s",req);
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -249,7 +278,7 @@ int main(int argc, char **argv, char **environ) {
 		 */
 		 /* TODO 2 */
 
-		newsock = accept(sockid, (struct sockaddr*)&client_addr, &client_len);		
+		newsock = accept(sockid, (struct sockaddr*)&client_addr, (socklen_t*)&client_len);		
     		if (newsock < 0) {
 			perror("accept failed\n");
 			exit(-1);
@@ -282,7 +311,13 @@ int main(int argc, char **argv, char **environ) {
 			 * 'use a while loop'
 			 */
 			/* TODO 3 */
-
+			r = read(newsock,buff,1023);
+			if(r < 0){
+				perror("Read error\n");
+			}
+			else{
+				printf("Read successful: %s\n",buff);
+			}
 //
 // What you may get from the client:
 //			GET / HTTP/1.0
