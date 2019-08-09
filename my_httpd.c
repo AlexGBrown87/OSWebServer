@@ -111,29 +111,29 @@ void SendDataBin(char *fileToSend, int sock, char *home, char *content) {
 	 */
 
 	 /* TODO 6 */
-	 s = write(sock,"I got your message\n",18);
-	 //s = write(sock,Header,strlen(Header));
+	 s = write(sock,Header,strlen(Header));
 	 if(s<0){
 	 	perror("Write 1 error\n");
 	 }
 	 else{
 	 	printf("Write 1 successful\n");
 	 }
-	 //f = open(fileToSend,O_RDONLY);
-	 //if(f<0){
-	 //	perror("Open error\n");
-	 //}
-	 //else{
-	 //	printf("Open successful\n");
-	 //}
-	 //s = write(sock,s,strlen(s));
-	 //if(s<0){
-	 //	perror("Write 2 error\n");
-	 //}
-	 //else{
-	 //	printf("Write 2 successful\n");
-	 //}
-	 //close(f);
+	 f = open(fileToSend,O_RDONLY);
+	 if(f<0){
+	 	perror("Open error\n");
+	 }
+	 else{
+	 	printf("Open successful\n");
+	 	//sending the file doesn't work
+	 	//s = write(sock,f,strlen(f));
+		//if(s<0){
+		//	perror("Write 2 error\n");
+		//}
+		//else{
+		//	printf("Write 2 successful\n");
+		//}
+		//close(f);
+	 }
 }
 
 
@@ -145,12 +145,11 @@ void ExtractFileRequest(char *req, char *buff) {
 
 	/* TODO 4  */
 	if(strstr(buff,"GET")){
-		int indexOfSlash = (int)(buff-strchr(buff,'/'));
-		buff=buff+indexOfSlash+1;
-		int indexOfSpace = (int)(req-strchr(req,' '));
-		req[indexOfSpace]='\0';
+		char *temp;
+		temp=strtok(buff," /");
+		temp=strtok(NULL," /");
+		strcpy(req,temp);
 	}
-	printf("HERE IS THE GET FILENAME:%s",req);
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -340,7 +339,6 @@ int main(int argc, char **argv, char **environ) {
 //
 
 			ExtractFileRequest(file_request, buff);
-
 			printf("** File Requested: |%s|\n", file_request);
 			fflush(stdout);
 
